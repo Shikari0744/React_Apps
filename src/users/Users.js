@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import User from "../es6/user/User";
 import {user_name_input_update, user_age_input, user_name_input} from "../constants/AppConstants";
 import UniqueId from 'react-html-id';
@@ -9,13 +9,13 @@ class Users extends Component {
         super();
         UniqueId.enableUniqueIds(this);
         this.state = {
-            users : [
-                {id : this.nextUniqueId(), name : "Akash", age : 25},
-                {id : this.nextUniqueId(), name : "Nikhil", age : 27},
-                {id : this.nextUniqueId(), name : "Pankej", age : 24},
-                {id : this.nextUniqueId(), name : "Ashish", age : 25}
+            users: [
+                {id: this.nextUniqueId(), name: "Akash", age: 25},
+                {id: this.nextUniqueId(), name: "Nikhil", age: 27},
+                {id: this.nextUniqueId(), name: "Pankej", age: 24},
+                {id: this.nextUniqueId(), name: "Ashish", age: 25}
             ],
-            title : "Users List"
+            title: "Users List"
         };
         console.log(this.state);
     }
@@ -83,7 +83,7 @@ class Users extends Component {
         const tempUser = Object.assign([], this.state.users);
         // It creates duplicate of users[] array in tempUser. It doesn't create the reference.
         tempUser.splice(index, 1);
-        this.setState({users:tempUser});
+        this.setState({users: tempUser});
     }
 
     changeUserName = (id, events) => {
@@ -95,7 +95,7 @@ class Users extends Component {
         changedUser.name = events.target.value;
         duplicateUsers[userIndex] = changedUser;
         this.setState({
-            users : duplicateUsers
+            users: duplicateUsers
         });
     }
 
@@ -116,7 +116,7 @@ class Users extends Component {
         this.setState({
             newSate
         })
-}
+    }
 
     render() {
         // let subTitle = this.props.children ? this.props.children : "N/A";
@@ -125,11 +125,15 @@ class Users extends Component {
             <div>
                 <div>
                     <h1> {this.state.title} </h1>
-                    {
-                        this.state.users.map((user, index) => {
-                            return <User changeEvent={this.changeUserName.bind(this, user.id)} deleteEvent={this.deleteUser.bind(this, index)} age={user.age} key={user.id}> {user.name} </User>
-                        })
-                    }
+                    <>
+                        {
+                            this.state.users.map((user, index) => {
+                                return <User changeEvent={this.changeUserName.bind(this, user.id)}
+                                             deleteEvent={this.deleteUser.bind(this, index)} age={user.age}
+                                             key={user.id}> {user.name} </User>
+                            })
+                        }
+                    </>
                 </div>
                 {/*<User age = {this.state.users[0].age}> {this.state.users[0].name} </User>*/}
                 {/*<User age = {this.state.users[1].age}> {this.state.users[1].name} </User>*/}

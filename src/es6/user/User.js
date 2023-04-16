@@ -6,7 +6,18 @@ const User = (props) => {
     let age = props.age;
     return (
         // ES6 Functional Components
-        <div name="ES6 Functional Components"> name : {name} | age : {age} </div>
+        <li>
+            <div>
+                <span name="ES6 Functional Components"> Name : {name} | Age : {age} </span>
+                <br/>
+                <div>
+                    <br/>
+                    <button onClick={props.deleteEvent}> Delete User</button>
+                    <input type="text" onChange={props.changeEvent} title="Change corresponding user name"/>
+                    <br/>
+                </div>
+            </div>
+        </li>
 );
 }
 

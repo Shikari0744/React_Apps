@@ -1,18 +1,24 @@
 import React, {Component} from "react";
 import User from "../es6/user/User";
 import {user_name_input_update, user_age_input, user_name_input} from "../constants/AppConstants";
+import UniqueId from 'react-html-id';
 
 class Users extends Component {
 
-    state = {
-        users : [
-            {name : "Akash", age : 25},
-            {name : "Nikhil", age : 27},
-            {name : "Pankej", age : 24},
-            {name : "Ashish", age : 25}
-        ],
-        title : "Users List"
-    };
+    constructor() {
+        super();
+        UniqueId.enableUniqueIds(this);
+        this.state = {
+            users : [
+                {id : this.nextUniqueId(), name : "Akash", age : 25},
+                {id : this.nextUniqueId(), name : "Nikhil", age : 27},
+                {id : this.nextUniqueId(), name : "Pankej", age : 24},
+                {id : this.nextUniqueId(), name : "Ashish", age : 25}
+            ],
+            title : "Users List"
+        };
+        console.log(this.state);
+    }
 
     onChangeInputAge = (event) => {
         const tpUser = document.getElementById(user_name_input).value;
@@ -73,6 +79,26 @@ class Users extends Component {
     //     });
     // }
 
+    deleteUser = (index, e) => {
+        const tempUser = Object.assign([], this.state.users);
+        // It creates duplicate of users[] array in tempUser. It doesn't create the reference.
+        tempUser.splice(index, 1);
+        this.setState({users:tempUser});
+    }
+
+    changeUserName = (id, events) => {
+        const userIndex = this.state.users.findIndex((user) => {
+            return user.id === id;
+        });
+        const changedUser = Object.assign([], this.state.users[userIndex]);
+        const duplicateUsers = Object.assign([], this.state.users);
+        changedUser.name = events.target.value;
+        duplicateUsers[userIndex] = changedUser;
+        this.setState({
+            users : duplicateUsers
+        });
+    }
+
     changeName = (e_name) => {
         const updatedName = document.getElementById(user_name_input_update).value;
         let previousName = document.getElementById(user_name_input).value;
@@ -98,12 +124,12 @@ class Users extends Component {
             // Class Components - It BY DEFAULT has the props
             <div>
                 <div>
-                <h1> {this.state.title} </h1>
-                {
-                    this.state.users.map((user) => {
-                        return <User age = {user.age}> {user.name} </User>
-                    })
-                }
+                    <h1> {this.state.title} </h1>
+                    {
+                        this.state.users.map((user, index) => {
+                            return <User changeEvent={this.changeUserName.bind(this, user.id)} deleteEvent={this.deleteUser.bind(this, index)} age={user.age} key={user.id}> {user.name} </User>
+                        })
+                    }
                 </div>
                 {/*<User age = {this.state.users[0].age}> {this.state.users[0].name} </User>*/}
                 {/*<User age = {this.state.users[1].age}> {this.state.users[1].name} </User>*/}
@@ -112,15 +138,16 @@ class Users extends Component {
                 <br/>
                 <div>
                     <div>
-                        <input id = {user_name_input} type = "text" title="name" />
-                        <input id = {user_name_input_update} type = "text" title="newName" />
-                        <input onChange={this.onChangeInputAge} id = {user_age_input} title = "user age" type = "number" />
+                        <input id={user_name_input} type="text" title="name"/>
+                        <input id={user_name_input_update} type="text" title="newName"/>
+                        <input onChange={this.onChangeInputAge} id={user_age_input} title="user age" type="number"/>
                         {/*One way binding - onChange event*/}
                     </div>
-                <button onClick={this.changeName.bind(this, 'default_name')}> Changed Name </button>
-                {/* if you call above function like makeMeYounger(), then it will execute function right away causing infinite loop as console will call render infinite because we are changing state in that function body*/}
-                {/*<button onClick={this.makeMeOlder}> Make User X years older </button>*/}
-                <br/>
+
+                    <button onClick={this.changeName.bind(this)}> Changed Name</button>
+                    {/* if you call above function like makeMeYounger(), then it will execute function right away causing infinite loop as console will call render infinite because we are changing state in that function body*/}
+                    {/*<button onClick={this.makeMeOlder}> Make User X years older </button>*/}
+                    <br/>
                 </div>
                 <br/>
             </div>

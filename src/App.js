@@ -18,7 +18,9 @@ class App extends Component {
     return (
         <div className = "App">
             <Users> Below is the list: </Users>
-            <Parent doSomething={this.changeTheWorld.bind(this, 'World has change now to NEW WORLD')} title={this.state.title}/>
+            <Parent
+                doSomething={this.changeTheWorld.bind(this, 'World has change now to NEW WORLD')} title={this.state.title}
+            />
         </div>
     );
   }
